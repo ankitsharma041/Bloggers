@@ -6,12 +6,13 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.ankit.blog.entities.Category;
+import com.ankit.blog.payload.CategoryDTO;
 @Service
 public interface CategoryService {
 
-	public Category addCategory(Category category);
+	public CategoryDTO addCategory(Category category);
 	
-	public Category updateCategory(Category category, Integer categoryId);
+	public CategoryDTO updateCategory(Category category, Integer categoryId);
 	
 	public String deleteCategory(Integer categoryId);
 	

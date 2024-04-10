@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ankit.blog.entities.Category;
+import com.ankit.blog.payload.CategoryDTO;
 import com.ankit.blog.services.CategoryService;
 
 @RestController
@@ -25,14 +26,14 @@ public class CategoryController {
 	private CategoryService categoryService;
 		
 	@PostMapping("/")
-	    public ResponseEntity<Category> addCategory(@RequestBody Category category){
-	    	Category addCategory = this.categoryService.addCategory(category);
+	    public ResponseEntity<CategoryDTO> addCategory(@RequestBody Category category){
+	    	CategoryDTO addCategory = this.categoryService.addCategory(category);
 			return ResponseEntity.ok(addCategory);
 	    	
 	    }
 	@PutMapping("/{categoryId}")
-	public ResponseEntity<Category> updateCategory(@RequestBody Category category, @PathVariable Integer categoryId){
-		Category updateCategory = this.categoryService.updateCategory(category, categoryId);
+	public ResponseEntity<CategoryDTO> updateCategory(@RequestBody Category category, @PathVariable Integer categoryId){
+		CategoryDTO updateCategory = this.categoryService.updateCategory(category, categoryId);
 		return ResponseEntity.ok(updateCategory);
 	}
 	@DeleteMapping("/{categoryId}")
