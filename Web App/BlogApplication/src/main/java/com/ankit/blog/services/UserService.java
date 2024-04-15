@@ -1,7 +1,6 @@
 package com.ankit.blog.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -20,5 +19,5 @@ public interface UserService {
 	
 	public List<User> getAllUser();
 	
-	public Optional<User> getUser(Integer userId);
+	public UserDTO getUser(Integer userId);
 	}

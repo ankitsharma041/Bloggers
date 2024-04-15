@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class CategoryDTO {
 
-	private int categoryId;
+	//private int categoryId;
 	private String title;
 	private String message;
 	private int statusCode;

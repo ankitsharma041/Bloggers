@@ -1,4 +1,5 @@
 package com.ankit.blog.services.implementation;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +23,7 @@ public class UserServiceImpl implements UserService {
 		if (existingUser != null) {
 			User dbUser = this.userRepository.findByEmail(addUser.getEmail());
 			if (dbUser != null) {
-				userDTO=new UserDTO();
+				userDTO = new UserDTO();
 				BeanUtils.copyProperties(existingUser, userDTO);
 				userDTO.setMessage("User already exist");
 				userDTO.setStatusCode(400);
@@ -33,11 +34,11 @@ public class UserServiceImpl implements UserService {
 //				}
 			} else {
 				User savedUser = this.userRepository.save(addUser);
-				userDTO=new UserDTO();
+				userDTO = new UserDTO();
 				BeanUtils.copyProperties(savedUser, userDTO);
 				userDTO.setMessage("Successfully saved");
 				userDTO.setStatusCode(200);
-				//return userDTO;
+				// return userDTO;
 			}
 		}
 		return userDTO;
@@ -45,10 +46,10 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public String deleteUser(Integer userId) {
-	
+
 		Optional<User> user = this.userRepository.findById(userId);
 		if (user != null && user.isPresent()) {
-			
+
 			this.userRepository.deleteById(userId);
 			return "User deleted successfully";
 		} else {
@@ -72,9 +73,9 @@ public class UserServiceImpl implements UserService {
 			user.setEmail(updateUser.getEmail());
 			user.setPassword(updateUser.getPassword());
 			user.setAbout(updateUser.getAbout());
-			
+
 			User updatedUser = this.userRepository.save(user);
-			userDTO=new UserDTO();
+			userDTO = new UserDTO();
 			BeanUtils.copyProperties(updatedUser, userDTO);
 			userDTO.setMessage("User updated Successfully");
 			userDTO.setStatusCode(200);
@@ -82,7 +83,7 @@ public class UserServiceImpl implements UserService {
 		} else {
 			userDTO = new UserDTO();
 			userDTO.setMessage("User Not Found");
-			//throw new RuntimeException("User not Found");
+			// throw new RuntimeException("User not Found");
 			userDTO.setStatusCode(404);
 		}
 		return userDTO;
@@ -95,10 +96,23 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Optional<User> getUser(Integer userId) {
-		Optional<User> user = this.userRepository.findById(userId);
-		return user;
-	}
+	public UserDTO getUser(Integer userId) {
 
+		UserDTO userDTO = null;
+		Optional<User> user = this.userRepository.findById(userId);
+		if (user.isPresent()) {
+			User user2 = user.get();			
+			userDTO = new UserDTO();
+			BeanUtils.copyProperties(user2, userDTO);
+			userDTO.setMessage("User Found");
+			userDTO.setStatusCode(200);
+		} else {
+			userDTO = new UserDTO();
+			userDTO.setMessage("User Not Found");
+			userDTO.setStatusCode(404);
+		}
+		return userDTO;
+
+	}
 
 }

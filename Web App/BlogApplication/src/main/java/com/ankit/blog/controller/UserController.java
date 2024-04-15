@@ -1,7 +1,7 @@
 package com.ankit.blog.controller;
 
 import java.util.List;
-import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.ankit.blog.entities.User;
 import com.ankit.blog.payload.UserDTO;
 import com.ankit.blog.services.UserService;
@@ -36,9 +37,9 @@ public class UserController {
 	}
 
 	@GetMapping("/{userId}")
-	public ResponseEntity<Optional<User>> getUser(@PathVariable Integer userId) {
-		Optional<User> user = this.userService.getUser(userId);
-		return ResponseEntity.ok(user);
+	public ResponseEntity<UserDTO> getUser(@PathVariable Integer userId) {
+		UserDTO getUser = this.userService.getUser(userId);
+		return ResponseEntity.ok(getUser);
 	}
 
 	@PutMapping("/{userId}")

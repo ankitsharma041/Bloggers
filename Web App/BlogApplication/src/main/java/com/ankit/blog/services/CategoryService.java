@@ -1,7 +1,6 @@
 package com.ankit.blog.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -16,7 +15,7 @@ public interface CategoryService {
 	
 	public String deleteCategory(Integer categoryId);
 	
-	Optional<Category> getCategory(Integer category);
+	CategoryDTO getCategory(Integer category);
 	
 	public List<Category> getCategories();
 }

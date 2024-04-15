@@ -1,7 +1,6 @@
 package com.ankit.blog.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -42,8 +41,8 @@ public class CategoryController {
 		return ResponseEntity.ok(deleteCategory);
 	}
 	@GetMapping("/{categoryId}")
-	public ResponseEntity<Optional<Category>> getCategory(@PathVariable Integer categoryId){
-		Optional<Category> getCategory = this.categoryService.getCategory(categoryId);
+	public ResponseEntity<CategoryDTO> getCategory(@PathVariable Integer categoryId){
+		CategoryDTO getCategory = this.categoryService.getCategory(categoryId);
 		return ResponseEntity.ok(getCategory);
 	}
 	@GetMapping("/")

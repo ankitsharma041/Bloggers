@@ -6,13 +6,15 @@ import java.util.Optional;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.ankit.blog.dao.CategoryRepository;
 import com.ankit.blog.entities.Category;
 import com.ankit.blog.payload.CategoryDTO;
 import com.ankit.blog.services.CategoryService;
+
 @Service
 public class CategoryServiceImpl implements CategoryService {
-	
+
 	@Autowired
 	private CategoryRepository categoryRepository;
 
@@ -20,9 +22,9 @@ public class CategoryServiceImpl implements CategoryService {
 	public CategoryDTO addCategory(Category category) {
 		CategoryDTO categoryDTO = null;
 		Category existingCategory = new Category();
-		if(existingCategory != null) {
+		if (existingCategory != null) {
 			Category dbCategory = this.categoryRepository.findById(category.getCategoryId());
-			if(dbCategory != null) {
+			if (dbCategory != null) {
 				try {
 					categoryDTO = new CategoryDTO();
 					BeanUtils.copyProperties(existingCategory, dbCategory);
@@ -31,14 +33,8 @@ public class CategoryServiceImpl implements CategoryService {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
-//				try {
-//					throw new Exception("Category already exists !");
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-			}
-			else {
+
+			} else {
 				Category saveCategory = this.categoryRepository.save(category);
 				try {
 					categoryDTO = new CategoryDTO();
@@ -48,7 +44,7 @@ public class CategoryServiceImpl implements CategoryService {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
+
 			}
 		}
 		return categoryDTO;
@@ -67,13 +63,13 @@ public class CategoryServiceImpl implements CategoryService {
 				BeanUtils.copyProperties(updatedCategory, categoryDTO);
 				categoryDTO.setMessage("Category updated Successfully");
 				categoryDTO.setStatusCode(200);
-				
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+
 		} else {
-			//throw new RuntimeException("Category not Found");
+			// throw new RuntimeException("Category not Found");
 			categoryDTO = new CategoryDTO();
 			categoryDTO.setMessage("Category not Found");
 			categoryDTO.setStatusCode(404);
@@ -90,13 +86,30 @@ public class CategoryServiceImpl implements CategoryService {
 		} else {
 			return "Category not found";
 		}
-		
+
 	}
 
 	@Override
-	public Optional<Category> getCategory(Integer category) {
-		Optional<Category> getCategory = this.categoryRepository.findById(category);
-		return getCategory;
+	public CategoryDTO getCategory(Integer categoryId) {
+
+		CategoryDTO categoryDTO = null;
+		Optional<Category> category = this.categoryRepository.findById(categoryId);
+		if (category.isPresent()) {
+			Category foundCategory = category.get();
+			//System.out.println(foundCategory.getTitle());
+			categoryDTO = new CategoryDTO();
+			
+			categoryDTO.setTitle(foundCategory.getTitle());
+			categoryDTO.setMessage("Category Found");
+			categoryDTO.setStatusCode(200);
+		} else {
+			categoryDTO = new CategoryDTO();
+			categoryDTO.setTitle("Not Exist");
+			categoryDTO.setMessage("Category Not Found");
+			categoryDTO.setStatusCode(404);
+		}
+		return categoryDTO;
+
 	}
 
 	@Override
@@ -105,6 +118,4 @@ public class CategoryServiceImpl implements CategoryService {
 		return getAll;
 	}
 
-	
-	
 }
