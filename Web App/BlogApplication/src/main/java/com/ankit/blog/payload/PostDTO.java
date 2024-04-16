@@ -1,14 +1,16 @@
 package com.ankit.blog.payload;
 
-import java.sql.Date;
+
+import java.util.Date;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 @Getter
 @Setter
 @NoArgsConstructor
-public class PostsDTO {
+public class PostDTO {
 
 	private String title;
 	private String content;
@@ -16,4 +18,5 @@ public class PostsDTO {
 	private Date date;
 	private CategoryDTO category;
 	private UserDTO user;
+
 }

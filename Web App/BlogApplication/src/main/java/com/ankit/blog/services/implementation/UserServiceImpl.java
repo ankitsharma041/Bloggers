@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ankit.blog.dao.UserRepository;
+import com.ankit.blog.dao.UserRepo;
 import com.ankit.blog.entities.User;
 import com.ankit.blog.payload.UserDTO;
 import com.ankit.blog.services.UserService;
@@ -14,14 +14,14 @@ import com.ankit.blog.services.UserService;
 @Service
 public class UserServiceImpl implements UserService {
 	@Autowired
-	private UserRepository userRepository;
+	private UserRepo userRepo;
 
 	@Override
 	public UserDTO createUser(User addUser) {
 		UserDTO userDTO = null;
 		User existingUser = new User();
 		if (existingUser != null) {
-			User dbUser = this.userRepository.findByEmail(addUser.getEmail());
+			User dbUser = this.userRepo.findByEmail(addUser.getEmail());
 			if (dbUser != null) {
 				userDTO = new UserDTO();
 				BeanUtils.copyProperties(existingUser, userDTO);
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
 //					e.printStackTrace();
 //				}
 			} else {
-				User savedUser = this.userRepository.save(addUser);
+				User savedUser = this.userRepo.save(addUser);
 				userDTO = new UserDTO();
 				BeanUtils.copyProperties(savedUser, userDTO);
 				userDTO.setMessage("Successfully saved");
@@ -47,10 +47,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String deleteUser(Integer userId) {
 
-		Optional<User> user = this.userRepository.findById(userId);
+		Optional<User> user = this.userRepo.findById(userId);
 		if (user != null && user.isPresent()) {
 
-			this.userRepository.deleteById(userId);
+			this.userRepo.deleteById(userId);
 			return "User deleted successfully";
 		} else {
 			return "User not found";
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDTO updateUser(Integer userId, User updateUser) {
 		UserDTO userDTO = null;
-		Optional<User> existingUser = this.userRepository.findById(userId);
+		Optional<User> existingUser = this.userRepo.findById(userId);
 		if (existingUser.isPresent()) {
 			User user = existingUser.get();
 			user.setName(updateUser.getName());
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
 			user.setPassword(updateUser.getPassword());
 			user.setAbout(updateUser.getAbout());
 
-			User updatedUser = this.userRepository.save(user);
+			User updatedUser = this.userRepo.save(user);
 			userDTO = new UserDTO();
 			BeanUtils.copyProperties(updatedUser, userDTO);
 			userDTO.setMessage("User updated Successfully");
@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<User> getAllUser() {
-		List<User> users = this.userRepository.findAll();
+		List<User> users = this.userRepo.findAll();
 		return users;
 	}
 
@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService {
 	public UserDTO getUser(Integer userId) {
 
 		UserDTO userDTO = null;
-		Optional<User> user = this.userRepository.findById(userId);
+		Optional<User> user = this.userRepo.findById(userId);
 		if (user.isPresent()) {
 			User user2 = user.get();			
 			userDTO = new UserDTO();

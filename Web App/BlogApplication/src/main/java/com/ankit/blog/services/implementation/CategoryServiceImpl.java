@@ -7,7 +7,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ankit.blog.dao.CategoryRepository;
+import com.ankit.blog.dao.CategoryRepo;
 import com.ankit.blog.entities.Category;
 import com.ankit.blog.payload.CategoryDTO;
 import com.ankit.blog.services.CategoryService;
@@ -16,14 +16,14 @@ import com.ankit.blog.services.CategoryService;
 public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
-	private CategoryRepository categoryRepository;
+	private CategoryRepo categoryRepo;
 
 	@Override
 	public CategoryDTO addCategory(Category category) {
 		CategoryDTO categoryDTO = null;
 		Category existingCategory = new Category();
 		if (existingCategory != null) {
-			Category dbCategory = this.categoryRepository.findById(category.getCategoryId());
+			Category dbCategory = this.categoryRepo.findById(category.getCategoryId());
 			if (dbCategory != null) {
 				try {
 					categoryDTO = new CategoryDTO();
@@ -35,7 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
 				}
 
 			} else {
-				Category saveCategory = this.categoryRepository.save(category);
+				Category saveCategory = this.categoryRepo.save(category);
 				try {
 					categoryDTO = new CategoryDTO();
 					BeanUtils.copyProperties(saveCategory, dbCategory);
@@ -53,11 +53,11 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public CategoryDTO updateCategory(Category category, Integer categoryId) {
 		CategoryDTO categoryDTO = null;
-		Optional<Category> existingCategory = this.categoryRepository.findById(categoryId);
+		Optional<Category> existingCategory = this.categoryRepo.findById(categoryId);
 		if (existingCategory.isPresent()) {
 			Category dbCategory = existingCategory.get();
 			dbCategory.setTitle(category.getTitle());
-			Category updatedCategory = this.categoryRepository.save(dbCategory);
+			Category updatedCategory = this.categoryRepo.save(dbCategory);
 			try {
 				categoryDTO = new CategoryDTO();
 				BeanUtils.copyProperties(updatedCategory, categoryDTO);
@@ -79,9 +79,9 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public String deleteCategory(Integer categoryId) {
-		Optional<Category> category = this.categoryRepository.findById(categoryId);
+		Optional<Category> category = this.categoryRepo.findById(categoryId);
 		if (category != null && category.isPresent()) {
-			this.categoryRepository.deleteById(categoryId);
+			this.categoryRepo.deleteById(categoryId);
 			return "Category deleted successfully";
 		} else {
 			return "Category not found";
@@ -93,7 +93,7 @@ public class CategoryServiceImpl implements CategoryService {
 	public CategoryDTO getCategory(Integer categoryId) {
 
 		CategoryDTO categoryDTO = null;
-		Optional<Category> category = this.categoryRepository.findById(categoryId);
+		Optional<Category> category = this.categoryRepo.findById(categoryId);
 		if (category.isPresent()) {
 			Category foundCategory = category.get();
 			//System.out.println(foundCategory.getTitle());
@@ -114,7 +114,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public List<Category> getCategories() {
-		List<Category> getAll = categoryRepository.findAll();
+		List<Category> getAll = categoryRepo.findAll();
 		return getAll;
 	}
 
