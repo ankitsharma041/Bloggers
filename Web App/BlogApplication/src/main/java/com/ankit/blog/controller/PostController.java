@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class PostController {
 	@Autowired
 	private PostService postService;
-	@PostMapping("/user/{userId}/category/{categoryId}")
+	@PostMapping("/user/{userId}/category/{categoryId}/post")
 	public ResponseEntity<PostDTO> createPost(@RequestBody PostDTO postDTO, @PathVariable Integer userId,
 			@PathVariable Integer categoryId) {
 		PostDTO postsDtoRes = this.postService.createPost(postDTO, userId, categoryId);
