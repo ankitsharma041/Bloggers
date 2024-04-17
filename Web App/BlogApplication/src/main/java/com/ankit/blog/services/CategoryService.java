@@ -15,7 +15,7 @@ public interface CategoryService {
 	
 	public String deleteCategory(Integer categoryId);
 	
-	CategoryDTO getCategory(Integer category);
+	CategoryDTO getCategory(Integer categoryId);
 	
 	public List<Category> getCategories();
 }

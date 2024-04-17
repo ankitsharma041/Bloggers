@@ -23,11 +23,14 @@ public class CategoryServiceImpl implements CategoryService {
 		CategoryDTO categoryDTO = null;
 		Category existingCategory = new Category();
 		if (existingCategory != null) {
-			Category dbCategory = this.categoryRepo.findById(category.getCategoryId());
+			Category dbCategory = this.categoryRepo.findByTitle(category.getTitle());
 			if (dbCategory != null) {
 				try {
 					categoryDTO = new CategoryDTO();
-					BeanUtils.copyProperties(existingCategory, dbCategory);
+					categoryDTO.setCategoryId(dbCategory.getCategoryId());
+					categoryDTO.setTitle(dbCategory.getTitle());
+					categoryDTO.setDescription(dbCategory.getDescription());
+					BeanUtils.copyProperties(existingCategory, categoryDTO);
 					categoryDTO.setMessage("Category already exist");
 					categoryDTO.setStatusCode(400);
 				} catch (Exception e) {
@@ -38,7 +41,10 @@ public class CategoryServiceImpl implements CategoryService {
 				Category saveCategory = this.categoryRepo.save(category);
 				try {
 					categoryDTO = new CategoryDTO();
-					BeanUtils.copyProperties(saveCategory, dbCategory);
+					categoryDTO.setCategoryId(saveCategory.getCategoryId());
+					categoryDTO.setTitle(saveCategory.getTitle());
+					categoryDTO.setDescription(saveCategory.getDescription());
+					BeanUtils.copyProperties(saveCategory, categoryDTO);
 					categoryDTO.setMessage("Category successfully added");
 					categoryDTO.setStatusCode(200);
 				} catch (Exception e) {
@@ -60,6 +66,9 @@ public class CategoryServiceImpl implements CategoryService {
 			Category updatedCategory = this.categoryRepo.save(dbCategory);
 			try {
 				categoryDTO = new CategoryDTO();
+				categoryDTO.setCategoryId(updatedCategory.getCategoryId());
+				categoryDTO.setTitle(updatedCategory.getTitle());
+				categoryDTO.setDescription(updatedCategory.getDescription());
 				BeanUtils.copyProperties(updatedCategory, categoryDTO);
 				categoryDTO.setMessage("Category updated Successfully");
 				categoryDTO.setStatusCode(200);
@@ -98,7 +107,8 @@ public class CategoryServiceImpl implements CategoryService {
 			Category foundCategory = category.get();
 			//System.out.println(foundCategory.getTitle());
 			categoryDTO = new CategoryDTO();
-			
+			categoryDTO.setCategoryId(foundCategory.getCategoryId());
+			categoryDTO.setDescription(foundCategory.getDescription());
 			categoryDTO.setTitle(foundCategory.getTitle());
 			categoryDTO.setMessage("Category Found");
 			categoryDTO.setStatusCode(200);

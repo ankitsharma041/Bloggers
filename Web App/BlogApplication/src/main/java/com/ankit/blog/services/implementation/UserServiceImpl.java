@@ -76,6 +76,7 @@ public class UserServiceImpl implements UserService {
 
 			User updatedUser = this.userRepo.save(user);
 			userDTO = new UserDTO();
+			
 			BeanUtils.copyProperties(updatedUser, userDTO);
 			userDTO.setMessage("User updated Successfully");
 			userDTO.setStatusCode(200);

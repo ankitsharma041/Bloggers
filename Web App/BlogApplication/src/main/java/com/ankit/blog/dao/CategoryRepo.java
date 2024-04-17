@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.ankit.blog.entities.Category;
 @Repository
 public interface CategoryRepo extends JpaRepository<Category, Integer>{
-	Category findById(int categoryId);
+	Category findByTitle(String title);
 }
