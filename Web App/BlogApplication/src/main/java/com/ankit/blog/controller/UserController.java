@@ -18,31 +18,31 @@ import com.ankit.blog.payload.UserDTO;
 import com.ankit.blog.services.UserService;
 
 @RestController
-@RequestMapping("api/user")
+@RequestMapping("api")
 public class UserController {
 
 	@Autowired
 	public UserService userService;
 
-	@PostMapping("/")
+	@PostMapping("addUser")
 	public ResponseEntity<UserDTO> createUser(@RequestBody User addUser) {
 		UserDTO newUser = this.userService.createUser(addUser);
 		return ResponseEntity.ok(newUser);
 	}
 
-	@GetMapping("/")
+	@GetMapping("getUsers")
 	public ResponseEntity<List<User>> getAllUsers() {
 		List<User> allUsers = this.userService.getAllUser();
 		return ResponseEntity.ok(allUsers);
 	}
 
-	@GetMapping("/{userId}")
+	@GetMapping("getUser/{userId}")
 	public ResponseEntity<UserDTO> getUser(@PathVariable Integer userId) {
 		UserDTO getUser = this.userService.getUser(userId);
 		return ResponseEntity.ok(getUser);
 	}
 
-	@PutMapping("/{userId}")
+	@PutMapping("updateUser/{userId}")
 	public ResponseEntity<UserDTO> udpateUser(@PathVariable Integer userId, @RequestBody User updateUser) {
 		UserDTO updatedUser = this.userService.updateUser(userId, updateUser);
 		return ResponseEntity.ok(updatedUser);
@@ -53,7 +53,7 @@ public class UserController {
 //		userService.deleteAllUsers();
 //	}
 
-	@DeleteMapping("/{userId}")
+	@DeleteMapping("deleteUser/{userId}")
 	public ResponseEntity<String> deleteUser(@PathVariable Integer userId) {
 		String message = this.userService.deleteUser(userId);
 		return ResponseEntity.ok(message);

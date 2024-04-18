@@ -1,14 +1,11 @@
 package com.ankit.blog.services.implementation;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.ankit.blog.dao.CategoryRepo;
 import com.ankit.blog.dao.PostRepo;
 import com.ankit.blog.dao.UserRepo;
@@ -37,9 +34,11 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public PostDTO createPost(PostDTO postDTO, Integer userId, Integer categoryId) {
 
-		User user = this.userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User", "id", userId));
-		
-		Category category = this.categoryRepo.findById(categoryId).orElseThrow(()-> new ResourceNotFoundException("Category","id", categoryId));
+		User user = this.userRepo.findById(userId)
+				.orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+
+		Category category = this.categoryRepo.findById(categoryId)
+				.orElseThrow(() -> new ResourceNotFoundException("Category", "id", categoryId));
 		Post post = this.modelMapper.map(postDTO, Post.class);
 		post.setDate(new Date());
 		post.setImage("ankit.png");
@@ -51,37 +50,50 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public PostDTO updatePost(PostDTO postDTO, Integer postId) {
-		
-		return null;
+		Post uPost = this.postRepo.findById(postId)
+				.orElseThrow(() -> new ResourceNotFoundException("Post", "id", postId));
+		uPost.setPostTitle(postDTO.getPostTitle());
+		uPost.setContent(postDTO.getContent());
+		uPost.setImage(postDTO.getImage());
+		Post updatePost = this.postRepo.save(uPost);
+		PostDTO postDTOs = this.modelMapper.map(updatePost, PostDTO.class);
+		postDTO.setMessage("Post has been Updated..");
+		return postDTOs;
 	}
 
 	@Override
 	public PostDTO getPostById(Integer postId) {
-		// TODO Auto-generated method stub
-		return null;
+		Post getPost = this.postRepo.findById(postId)
+				.orElseThrow(() -> new ResourceNotFoundException("Post", "id", postId));
+		PostDTO postDTO = this.modelMapper.map(getPost, PostDTO.class);
+		return postDTO;
 	}
 
 	@Override
 	public List<PostDTO> getAllPosts() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Post> getAllPosts = this.postRepo.findAll();
+		List<PostDTO> postDTO = getAllPosts.stream().map((posts) -> this.modelMapper.map(posts, PostDTO.class))
+				.collect(Collectors.toList());
+		return postDTO;
 	}
 
 	@Override
 	public List<PostDTO> getPostByUser(Integer userId) {
-		User user = this.userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User", "id", userId));
-		List<Post> post = this.postRepo.findByUser(user);
-		List<PostDTO> postDTO = new ArrayList<PostDTO>();
-		BeanUtils.copyProperties(post, postDTO);
+		User user = this.userRepo.findById(userId)
+				.orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+		List<Post> posts = this.postRepo.findByUser(user);
+		List<PostDTO> postDTO = posts.stream().map((post) -> this.modelMapper.map(post, PostDTO.class))
+				.collect(Collectors.toList());
 		return postDTO;
 	}
 
 	@Override
 	public List<PostDTO> getPostByCategory(Integer categoryId) {
-		Category category = this.categoryRepo.findById(categoryId).orElseThrow(()-> new ResourceNotFoundException("Category", "id", categoryId));
-		List<Post> post = this.postRepo.findByCategory(category);
-		List<PostDTO> postDTO = new ArrayList<PostDTO>();
-		BeanUtils.copyProperties(post, postDTO);
+		Category category = this.categoryRepo.findById(categoryId)
+				.orElseThrow(() -> new ResourceNotFoundException("Category", "id", categoryId));
+		List<Post> posts = this.postRepo.findByCategory(category);
+		List<PostDTO> postDTO = posts.stream().map((post) -> this.modelMapper.map(post, PostDTO.class))
+				.collect(Collectors.toList());
 		return postDTO;
 	}
 
@@ -89,6 +101,13 @@ public class PostServiceImpl implements PostService {
 	public List<PostDTO> serchPosts(String keyword) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void deletePost(Integer postId) {
+		Post dPost = this.postRepo.findById(postId)
+				.orElseThrow(() -> new ResourceNotFoundException("Post", "id", postId));
+		this.postRepo.delete(dPost);
 	}
 
 }

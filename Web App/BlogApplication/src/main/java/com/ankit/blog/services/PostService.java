@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.ankit.blog.entities.Post;
 import com.ankit.blog.payload.PostDTO;
 @Service
 public interface PostService {
@@ -22,5 +21,7 @@ public interface PostService {
 	public List<PostDTO> getPostByCategory(Integer categoryId);
 	
 	public List<PostDTO> serchPosts(String keyword);
+	
+	public void deletePost(Integer postId);
 
 }

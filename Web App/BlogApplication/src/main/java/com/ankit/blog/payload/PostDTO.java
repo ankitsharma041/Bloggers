@@ -17,4 +17,5 @@ public class PostDTO {
 	private Date date;
 	private UserDTO user;
 	private CategoryDTO category;
+	private String message;
 }
