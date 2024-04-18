@@ -48,11 +48,6 @@ public class UserController {
 		return ResponseEntity.ok(updatedUser);
 	}
 
-//	@DeleteMapping("/")
-//	public void deleteAllUsers() {
-//		userService.deleteAllUsers();
-//	}
-
 	@DeleteMapping("deleteUser/{userId}")
 	public ResponseEntity<String> deleteUser(@PathVariable Integer userId) {
 		String message = this.userService.deleteUser(userId);

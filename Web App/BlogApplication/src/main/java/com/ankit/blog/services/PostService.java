@@ -4,13 +4,14 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.ankit.blog.entities.Post;
 import com.ankit.blog.payload.PostDTO;
 @Service
 public interface PostService {
 	
 	public PostDTO createPost(PostDTO postDTO, Integer userId, Integer categoryId);
 	
-	public PostDTO updatePost(PostDTO postDTO, Integer postId);
+	public PostDTO updatePost(Post post, Integer postId);
 	
 	public PostDTO getPostById(Integer postId);
 	

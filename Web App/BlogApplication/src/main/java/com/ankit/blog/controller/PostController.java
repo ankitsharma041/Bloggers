@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ankit.blog.entities.Post;
 import com.ankit.blog.exception.ApiResponse;
 import com.ankit.blog.payload.PostDTO;
 import com.ankit.blog.services.PostService;
@@ -58,8 +59,8 @@ public class PostController {
 		
 	}
 	@PutMapping("updatePost/{postId}")
-	public ResponseEntity<PostDTO> updatePost(@RequestBody PostDTO postDTO, @PathVariable Integer postId){
-		PostDTO updatePost = this.postService.updatePost(postDTO, postId);
+	public ResponseEntity<PostDTO> updatePost(@RequestBody Post post, @PathVariable Integer postId){
+		PostDTO updatePost = this.postService.updatePost(post, postId);
 		return new ResponseEntity<PostDTO>(updatePost, HttpStatus.OK);
 	}
 }
