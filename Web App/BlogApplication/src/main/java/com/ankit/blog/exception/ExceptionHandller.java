@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.ankit.blog.payload.ApiResponse;
+
 @RestControllerAdvice
 public class ExceptionHandller {
 	@ExceptionHandler(ResourceNotFoundException.class)

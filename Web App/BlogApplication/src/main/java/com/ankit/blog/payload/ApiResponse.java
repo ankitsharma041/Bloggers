@@ -1,4 +1,4 @@
-package com.ankit.blog.exception;
+package com.ankit.blog.payload;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

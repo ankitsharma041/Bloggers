@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.ankit.blog.dao.CategoryRepo;
 import com.ankit.blog.dao.PostRepo;
@@ -32,20 +35,29 @@ public class PostServiceImpl implements PostService {
 	private ModelMapper modelMapper;
 
 	@Override
-	public PostDTO createPost(PostDTO postDTO, Integer userId, Integer categoryId) {
+	public PostDTO createPost(Post post, Integer userId, Integer categoryId) {
 
 		User user = this.userRepo.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
 		Category category = this.categoryRepo.findById(categoryId)
 				.orElseThrow(() -> new ResourceNotFoundException("Category", "id", categoryId));
-		Post post = this.modelMapper.map(postDTO, Post.class);
-		post.setDate(new Date());
-		post.setImage("ankit.png");
-		post.setUser(user);
-		post.setCategory(category);
-		Post newPost = this.postRepo.save(post);
-		return this.modelMapper.map(newPost, PostDTO.class);
+		Post cPost = new Post();
+		cPost.setPostTitle(post.getPostTitle());
+		cPost.setImage("test.png");
+		cPost.setContent(post.getContent());
+		cPost.setDate(new Date());
+		cPost.setUser(user);
+		cPost.setCategory(category);
+		cPost.setPostId(post.getPostId());
+		
+		Post newPost = this.postRepo.save(cPost);
+		PostDTO postDTO = this.modelMapper.map(newPost, PostDTO.class);
+		postDTO.setMessage("Post Created Successfully");
+		
+		
+		return postDTO;
+		
 	}
 
 	@Override
@@ -77,8 +89,11 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public List<PostDTO> getAllPosts() {
-		List<Post> getAllPosts = this.postRepo.findAll();
+	public List<PostDTO> getAllPosts(Integer pageNumber, Integer pageSize) {
+		
+		Pageable pageable = PageRequest.of(pageNumber, pageSize);
+		Page<Post> pagePost = this.postRepo.findAll(pageable);
+		List<Post> getAllPosts =  pagePost.getContent();                     //this.postRepo.findAll();
 		List<PostDTO> postDTO = getAllPosts.stream().map((posts) -> this.modelMapper.map(posts, PostDTO.class))
 				.collect(Collectors.toList());
 		return postDTO;

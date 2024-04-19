@@ -9,13 +9,13 @@ import com.ankit.blog.payload.PostDTO;
 @Service
 public interface PostService {
 	
-	public PostDTO createPost(PostDTO postDTO, Integer userId, Integer categoryId);
+	public PostDTO createPost(Post post, Integer userId, Integer categoryId);
 	
 	public PostDTO updatePost(Post post, Integer postId);
 	
 	public PostDTO getPostById(Integer postId);
 	
-	public List<PostDTO> getAllPosts();
+	public List<PostDTO> getAllPosts(Integer pageNumber, Integer pageSize);
 	
 	public List<PostDTO> getPostByUser(Integer userId);
 	
