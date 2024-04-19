@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ankit.blog.dao.CategoryRepo;
 import com.ankit.blog.entities.Category;
+import com.ankit.blog.exception.ResourceNotFoundException;
 import com.ankit.blog.payload.CategoryDTO;
 import com.ankit.blog.services.CategoryService;
 
@@ -17,6 +19,8 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
 	private CategoryRepo categoryRepo;
+	@Autowired
+	private ModelMapper modelMapper;
 
 	@Override
 	public CategoryDTO addCategory(Category category) {
@@ -58,31 +62,19 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public CategoryDTO updateCategory(Category category, Integer categoryId) {
-		CategoryDTO categoryDTO = null;
-		Optional<Category> existingCategory = this.categoryRepo.findById(categoryId);
-		if (existingCategory.isPresent()) {
-			Category dbCategory = existingCategory.get();
-			dbCategory.setTitle(category.getTitle());
-			Category updatedCategory = this.categoryRepo.save(dbCategory);
-			try {
-				categoryDTO = new CategoryDTO();
-				categoryDTO.setCategoryId(updatedCategory.getCategoryId());
-				categoryDTO.setTitle(updatedCategory.getTitle());
-				categoryDTO.setDescription(updatedCategory.getDescription());
-				BeanUtils.copyProperties(updatedCategory, categoryDTO);
-				categoryDTO.setMessage("Category updated Successfully");
-				categoryDTO.setStatusCode(200);
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-		} else {
-			// throw new RuntimeException("Category not Found");
-			categoryDTO = new CategoryDTO();
-			categoryDTO.setMessage("Category not Found");
-			categoryDTO.setStatusCode(404);
+		Category uCategory = this.categoryRepo.findById(categoryId).orElseThrow(()-> new ResourceNotFoundException("Category", "id", categoryId));
+		if(category.getTitle() != null) {
+			uCategory.setTitle(category.getTitle());
 		}
+		if(category.getDescription() != null) {
+			uCategory.setDescription(category.getDescription());
+		}
+		
+		Category updatedCategory = this.categoryRepo.save(uCategory);
+		CategoryDTO categoryDTO = this.modelMapper.map(updatedCategory, CategoryDTO.class);
+		categoryDTO.setMessage("Category has been Updated successfully");
+		categoryDTO.setStatusCode(200);
+		categoryDTO.setCategoryId(updatedCategory.getCategoryId());
 		return categoryDTO;
 	}
 
@@ -105,7 +97,6 @@ public class CategoryServiceImpl implements CategoryService {
 		Optional<Category> category = this.categoryRepo.findById(categoryId);
 		if (category.isPresent()) {
 			Category foundCategory = category.get();
-			//System.out.println(foundCategory.getTitle());
 			categoryDTO = new CategoryDTO();
 			categoryDTO.setCategoryId(foundCategory.getCategoryId());
 			categoryDTO.setDescription(foundCategory.getDescription());

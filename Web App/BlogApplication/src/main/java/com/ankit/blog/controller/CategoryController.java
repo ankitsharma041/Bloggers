@@ -18,34 +18,34 @@ import com.ankit.blog.payload.CategoryDTO;
 import com.ankit.blog.services.CategoryService;
 
 @RestController
-@RequestMapping("api/category")
+@RequestMapping("api")
 public class CategoryController {
 	
 	@Autowired
 	private CategoryService categoryService;
 		
-	@PostMapping("/")
+	@PostMapping("addCategory")
 	    public ResponseEntity<CategoryDTO> addCategory(@RequestBody Category category){
 	    	CategoryDTO addCategory = this.categoryService.addCategory(category);
 			return ResponseEntity.ok(addCategory);
 	    	
 	    }
-	@PutMapping("/{categoryId}")
+	@PutMapping("updateCategory/{categoryId}")
 	public ResponseEntity<CategoryDTO> updateCategory(@RequestBody Category category, @PathVariable Integer categoryId){
 		CategoryDTO updateCategory = this.categoryService.updateCategory(category, categoryId);
 		return ResponseEntity.ok(updateCategory);
 	}
-	@DeleteMapping("/{categoryId}")
+	@DeleteMapping("deleteCategory/{categoryId}")
 	public ResponseEntity<String> deleteCategory(@PathVariable Integer categoryId){
 		String deleteCategory = this.categoryService.deleteCategory(categoryId);
 		return ResponseEntity.ok(deleteCategory);
 	}
-	@GetMapping("/{categoryId}")
+	@GetMapping("getCategory/{categoryId}")
 	public ResponseEntity<CategoryDTO> getCategory(@PathVariable Integer categoryId){
 		CategoryDTO getCategory = this.categoryService.getCategory(categoryId);
 		return ResponseEntity.ok(getCategory);
 	}
-	@GetMapping("/")
+	@GetMapping("getCategories")
 	public ResponseEntity<List<Category>> getCategories(){
 		List<Category> getAll = this.categoryService.getCategories();
 		return ResponseEntity.ok(getAll);

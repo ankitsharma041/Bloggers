@@ -3,6 +3,8 @@ package com.ankit.blog.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,7 +34,7 @@ public class User {
 	private String password;
 
 	private String about;
-	
+	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Post> post = new ArrayList<>();
 

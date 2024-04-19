@@ -11,7 +11,7 @@ public interface PostService {
 	
 	public PostDTO createPost(PostDTO postDTO, Integer userId, Integer categoryId);
 	
-	public PostDTO updatePost(PostDTO postDTO, Integer postId);
+	public PostDTO updatePost(Post post, Integer postId);
 	
 	public PostDTO getPostById(Integer postId);
 	
@@ -22,5 +22,7 @@ public interface PostService {
 	public List<PostDTO> getPostByCategory(Integer categoryId);
 	
 	public List<PostDTO> serchPosts(String keyword);
+	
+	public void deletePost(Integer postId);
 
 }

@@ -3,6 +3,8 @@ package com.ankit.blog.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,7 +27,7 @@ public class Category {
 	private int categoryId;
 	private String description;
 	private String title;
-	
+	@JsonIgnore
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Post> post = new ArrayList<>();
 	
