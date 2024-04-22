@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.ankit.blog.dao.UserRepo;
 import com.ankit.blog.entities.User;
 import com.ankit.blog.exception.ResourceNotFoundException;
-import com.ankit.blog.payload.UserDTO;
+import com.ankit.blog.payload.*;
 import com.ankit.blog.services.UserService;
 
 @Service
