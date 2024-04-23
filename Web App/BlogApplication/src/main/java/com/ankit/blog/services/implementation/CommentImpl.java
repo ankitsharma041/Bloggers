@@ -39,4 +39,15 @@ public class CommentImpl implements CommentService {
 		this.commentRepo.delete(comment);
 	}
 
+	@Override
+	public CommentDTO updateComment(CommentDTO commentDTO, Integer commentId) {
+		Comments comment = this.commentRepo.findById(commentId).orElseThrow(()-> new ResourceNotFoundException("Comment", "id", commentId));
+		if(comment.getContent() != null) {
+		comment.setContent(commentDTO.getContent());
+		}
+		CommentDTO commentDTOs = this.modelMapper.map(comment, CommentDTO.class);
+		commentDTOs.setMessage("Comment has been Updated");
+		return commentDTOs;
+	}
+
 }

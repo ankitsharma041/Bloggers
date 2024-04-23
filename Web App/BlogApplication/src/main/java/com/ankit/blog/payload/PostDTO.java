@@ -14,7 +14,7 @@ import lombok.Setter;
 public class PostDTO {
 
 	private int postId;
-	private String postTitle;
+	private String title;
 	private String image;
 	private String content;
 	private Date date;

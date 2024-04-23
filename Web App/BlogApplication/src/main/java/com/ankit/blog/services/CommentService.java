@@ -9,4 +9,5 @@ public interface CommentService {
 
 	public CommentDTO postComment(CommentDTO commentDTO, Integer postId);
 	public void deleteComment(Integer commentId);
+	public CommentDTO updateComment(CommentDTO commentDTO, Integer commentId);
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.ankit.blog.dao.CategoryRepo;
 import com.ankit.blog.dao.PostRepo;
@@ -17,6 +18,7 @@ import com.ankit.blog.entities.Post;
 import com.ankit.blog.entities.User;
 import com.ankit.blog.exception.ResourceNotFoundException;
 import com.ankit.blog.payload.PostDTO;
+import com.ankit.blog.payload.PostResponse;
 import com.ankit.blog.services.PostService;
 
 @Service
@@ -43,7 +45,7 @@ public class PostServiceImpl implements PostService {
 		Category category = this.categoryRepo.findById(categoryId)
 				.orElseThrow(() -> new ResourceNotFoundException("Category", "id", categoryId));
 		Post cPost = new Post();
-		cPost.setPostTitle(post.getPostTitle());
+		cPost.setTitle(post.getTitle());
 		cPost.setImage("test.png");
 		cPost.setContent(post.getContent());
 		cPost.setDate(new Date());
@@ -64,8 +66,8 @@ public class PostServiceImpl implements PostService {
 	public PostDTO updatePost(Post post, Integer postId) {
 		Post uPost = this.postRepo.findById(postId)
 				.orElseThrow(() -> new ResourceNotFoundException("Post", "id", postId));
-		if(post.getPostTitle() != null) {
-			uPost.setPostTitle(post.getPostTitle());
+		if(post.getTitle() != null) {
+			uPost.setTitle(post.getTitle());
 		}
 		if(post.getContent() != null) {
 			uPost.setContent(post.getContent());
@@ -89,14 +91,24 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public List<PostDTO> getAllPosts(Integer pageNumber, Integer pageSize) {
+	public PostResponse getAllPosts(Integer pageNumber, Integer pageSize, String sortBy, String sortDirection) {
+		Sort sort = (sortDirection.equalsIgnoreCase("ascending")) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
 		
-		Pageable pageable = PageRequest.of(pageNumber, pageSize);
+		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 		Page<Post> pagePost = this.postRepo.findAll(pageable);
 		List<Post> getAllPosts =  pagePost.getContent();                     //this.postRepo.findAll();
 		List<PostDTO> postDTO = getAllPosts.stream().map((posts) -> this.modelMapper.map(posts, PostDTO.class))
 				.collect(Collectors.toList());
-		return postDTO;
+		
+		PostResponse postResponse = new PostResponse();
+		postResponse.setContent(postDTO);
+		postResponse.setPageNumber(pagePost.getNumber());
+		postResponse.setTotalElements(pagePost.getTotalElements());
+		postResponse.setTotalPages(pagePost.getTotalPages());
+		postResponse.setPageSize(pagePost.getSize());
+		postResponse.setLastPage(pagePost.isLast());
+		return postResponse;
+		
 	}
 
 	@Override
@@ -120,9 +132,11 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public List<PostDTO> serchPosts(String keyword) {
-		
-		return null;
+	public List<PostDTO> searchPosts(String keyword) {
+		List<Post> posts = this.postRepo.findByTitleContaining(keyword);
+		List<PostDTO> postDTO = posts.stream().map((post) -> this.modelMapper.map(post, PostDTO.class))
+				.collect(Collectors.toList());
+		return postDTO;
 	}
 
 	@Override
