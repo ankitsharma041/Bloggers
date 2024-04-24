@@ -1,4 +1,4 @@
-package com.ankit.blog.configue;
+package com.ankit.blog.constants;
 
 public class AppContants {
 
