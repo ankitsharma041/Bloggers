@@ -19,4 +19,6 @@ public interface UserService {
 	public List<User> getAllUser();
 
 	public UserDTO getUser(Integer userId);
+	
+	
 }

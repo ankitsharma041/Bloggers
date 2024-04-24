@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.ankit.blog.dao.UserRepo;
 import com.ankit.blog.entities.User;
 import com.ankit.blog.exception.ResourceNotFoundException;
-import com.ankit.blog.payload.*;
+import com.ankit.blog.payload.UserDTO;
 import com.ankit.blog.services.UserService;
 
 @Service
@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
 		UserDTO userDTO = null;
 		User existingUser = new User();
 		if (existingUser != null) {
-			User dbUser = this.userRepo.findByEmail(addUser.getEmail());
+			Optional<User> dbUser = this.userRepo.findByEmail(addUser.getEmail());
 			if (dbUser != null) {
 				userDTO = new UserDTO();
 				BeanUtils.copyProperties(existingUser, userDTO);
@@ -59,30 +59,30 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDTO updateUser(Integer userId, User updateUser) {
-	
-	    User user = this.userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
-	    if (updateUser.getName() != null) {
-	        user.setName(updateUser.getName());
-	    }
-	    if (updateUser.getEmail() != null) {
-	        user.setEmail(updateUser.getEmail());
-	    }
-	    if (updateUser.getPassword() != null) {
-	       
-	        user.setPassword(updateUser.getPassword()); 
-	    }
-	    if (updateUser.getAbout() != null) {
-	        user.setAbout(updateUser.getAbout());
-	    }
 
-	    User updatedUser = this.userRepo.save(user);
-	    UserDTO	userDTO = this.modelMapper.map(updatedUser, UserDTO.class);
-	    userDTO.setMessage("User has been updated successfully");
-	    userDTO.setStatusCode(200);
-	    userDTO.setId(updatedUser.getId());
-	    return userDTO;
+		User user = this.userRepo.findById(userId)
+				.orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+		if (updateUser.getName() != null) {
+			user.setName(updateUser.getName());
+		}
+		if (updateUser.getEmail() != null) {
+			user.setEmail(updateUser.getEmail());
+		}
+		if (updateUser.getPassword() != null) {
+
+			user.setPassword(updateUser.getPassword());
+		}
+		if (updateUser.getAbout() != null) {
+			user.setAbout(updateUser.getAbout());
+		}
+
+		User updatedUser = this.userRepo.save(user);
+		UserDTO userDTO = this.modelMapper.map(updatedUser, UserDTO.class);
+		userDTO.setMessage("User has been updated successfully");
+		userDTO.setStatusCode(200);
+		userDTO.setId(updatedUser.getId());
+		return userDTO;
 	}
-
 
 	@Override
 	public List<User> getAllUser() {
