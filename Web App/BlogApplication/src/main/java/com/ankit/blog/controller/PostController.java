@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ankit.blog.configue.AppContants;
+import com.ankit.blog.constants.AppContants;
 import com.ankit.blog.entities.Post;
 import com.ankit.blog.payload.ApiResponse;
 import com.ankit.blog.payload.PostDTO;
