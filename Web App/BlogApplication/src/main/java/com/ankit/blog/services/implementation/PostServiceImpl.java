@@ -17,8 +17,10 @@ import com.ankit.blog.entities.Category;
 import com.ankit.blog.entities.Post;
 import com.ankit.blog.entities.User;
 import com.ankit.blog.exception.ResourceNotFoundException;
+import com.ankit.blog.payload.CategoryDTO;
 import com.ankit.blog.payload.PostDTO;
 import com.ankit.blog.payload.PostResponse;
+import com.ankit.blog.payload.UserDTO;
 import com.ankit.blog.services.PostService;
 
 @Service
@@ -41,21 +43,27 @@ public class PostServiceImpl implements PostService {
 
 		User user = this.userRepo.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
-
+		UserDTO userDTO = this.modelMapper.map(user, UserDTO.class);
+		userDTO.setId(user.getId());
+		userDTO.setMessage("User name:- "+user.getName());
+		userDTO.setStatusCode(200);
+		
 		Category category = this.categoryRepo.findById(categoryId)
 				.orElseThrow(() -> new ResourceNotFoundException("Category", "id", categoryId));
-		Post cPost = new Post();
-		cPost.setTitle(post.getTitle());
-		cPost.setImage("test.png");
-		cPost.setContent(post.getContent());
-		cPost.setDate(new Date());
-		cPost.setUser(user);
-		cPost.setCategory(category);
-		cPost.setPostId(post.getPostId());
-		
-		Post newPost = this.postRepo.save(cPost);
+		CategoryDTO categoryDTO = this.modelMapper.map(category, CategoryDTO.class);
+		categoryDTO.setId(category.getId());
+		categoryDTO.setMessage("Cateogory title:- "+category.getTitle());
+		categoryDTO.setStatusCode(200);
+		Post newPost = this.postRepo.save(post);
 		PostDTO postDTO = this.modelMapper.map(newPost, PostDTO.class);
-		postDTO.setMessage("Post Created Successfully");
+		
+		postDTO.setId(newPost.getId());
+		postDTO.setTitle(newPost.getTitle());
+		postDTO.setDate(new Date());
+		postDTO.setUser(userDTO);
+		postDTO.setCategory(categoryDTO);
+		postDTO.setMessage("New Post added successfully!!..");
+		postDTO.setStatusCode(200);
 		
 		
 		return postDTO;

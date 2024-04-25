@@ -25,7 +25,7 @@ import lombok.Setter;
 public class Post {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int postId;
+	private int id;
 	private String title;
 	private String image;
 	@Column(length = 10000)

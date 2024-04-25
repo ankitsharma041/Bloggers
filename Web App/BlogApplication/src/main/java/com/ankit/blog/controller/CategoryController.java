@@ -36,8 +36,8 @@ public class CategoryController {
 		return ResponseEntity.ok(updateCategory);
 	}
 	@DeleteMapping("deleteCategory/{categoryId}")
-	public ResponseEntity<String> deleteCategory(@PathVariable Integer categoryId){
-		String deleteCategory = this.categoryService.deleteCategory(categoryId);
+	public ResponseEntity<CategoryDTO> deleteCategory(@PathVariable Integer categoryId){
+		CategoryDTO deleteCategory = this.categoryService.deleteCategory(categoryId);
 		return ResponseEntity.ok(deleteCategory);
 	}
 	@GetMapping("getCategory/{categoryId}")

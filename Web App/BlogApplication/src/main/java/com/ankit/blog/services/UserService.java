@@ -14,7 +14,7 @@ public interface UserService {
 
 	public UserDTO updateUser(Integer userId, User updateUser);
 
-	public String deleteUser(Integer userId);
+	public UserDTO deleteUser(Integer userId);
 
 	public List<User> getAllUser();
 

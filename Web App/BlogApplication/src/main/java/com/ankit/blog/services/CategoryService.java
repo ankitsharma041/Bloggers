@@ -13,7 +13,7 @@ public interface CategoryService {
 	
 	public CategoryDTO updateCategory(Category category, Integer categoryId);
 	
-	public String deleteCategory(Integer categoryId);
+	public CategoryDTO deleteCategory(Integer categoryId);
 	
 	CategoryDTO getCategory(Integer categoryId);
 	

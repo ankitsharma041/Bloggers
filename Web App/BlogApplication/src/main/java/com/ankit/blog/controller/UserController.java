@@ -3,6 +3,7 @@ package com.ankit.blog.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.ankit.blog.entities.User;
 import com.ankit.blog.payload.UserDTO;
 import com.ankit.blog.services.UserService;
@@ -49,9 +49,10 @@ public class UserController {
 	}
 
 	@DeleteMapping("deleteUser/{userId}")
-	public ResponseEntity<String> deleteUser(@PathVariable Integer userId) {
-		String message = this.userService.deleteUser(userId);
-		return ResponseEntity.ok(message);
+	public ResponseEntity<UserDTO> deleteUser(@PathVariable Integer userId) {
+
+		UserDTO deletedUser = this.userService.deleteUser(userId);
+		return new ResponseEntity<UserDTO>(deletedUser, HttpStatus.OK);
 	}
 
 }
