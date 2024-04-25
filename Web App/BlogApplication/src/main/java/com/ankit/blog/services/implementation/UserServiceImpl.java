@@ -23,27 +23,22 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDTO createUser(User addUser) {
-		UserDTO userDTO = null;
-		
-		//User existingUser = new User();
-		User dbUser = this.userRepo.findByEmail(addUser.getEmail()).orElseThrow(()-> new ResourceNotFoundException("User", "email: "+addUser.getEmail(), 0));
-		if (dbUser != null) {
-				userDTO = new UserDTO();
-				BeanUtils.copyProperties(dbUser, userDTO);
-				userDTO.setMessage("User already exist");
-				userDTO.setStatusCode(400);
-
-			} else {
-				User savedUser = this.userRepo.save(addUser);
-				userDTO = new UserDTO();
-				BeanUtils.copyProperties(savedUser, userDTO);
-				userDTO.setMessage("Successfully saved");
-				userDTO.setStatusCode(200);
-			}
+		Optional<User> dbUser = this.userRepo.findByEmail(addUser.getEmail());
+		UserDTO userDTO = new UserDTO();
+		if(dbUser.isPresent()) {
+			userDTO = new UserDTO();
+			userDTO.setMessage(addUser.getEmail()+(" already exists"));
+			userDTO.setStatusCode(400);
+		}else {
+			
+			User newUser = this.userRepo.save(addUser);	
+			userDTO = this.modelMapper.map(newUser, UserDTO.class);
+			userDTO.setMessage("User has been added");
+			userDTO.setStatusCode(200);
+		}
 		
 		return userDTO;
 	}
-	
 
 	@Override
 	public String deleteUser(Integer userId) {
