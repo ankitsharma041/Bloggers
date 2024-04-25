@@ -12,12 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.ankit.blog.Security.JwtTokenHelper;
 import com.ankit.blog.payload.JwtAuthRequest;
 import com.ankit.blog.payload.JwtAuthResponse;
-import com.ankit.blog.payload.UserDTO;
-import com.ankit.blog.services.UserService;
 
 @RestController
 	@RequestMapping("/api/auth/")
@@ -43,7 +40,7 @@ import com.ankit.blog.services.UserService;
 		}
 
 		private void authenticate(String username, String password) throws Exception {
-			// TODO Auto-generated method stub
+			
 			UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
 					username, password);
 
@@ -51,7 +48,7 @@ import com.ankit.blog.services.UserService;
 				this.authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
 			} catch (BadCredentialsException e) {
-				// TODO: handle exception
+				
 				System.out.println("Invalid user details!");
 				throw new Exception("Invalid user details!");
 			}

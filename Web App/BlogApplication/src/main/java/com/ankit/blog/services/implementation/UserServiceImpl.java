@@ -24,12 +24,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDTO createUser(User addUser) {
 		UserDTO userDTO = null;
-		User existingUser = new User();
-		if (existingUser != null) {
-			Optional<User> dbUser = this.userRepo.findByEmail(addUser.getEmail());
-			if (dbUser != null) {
+		
+		//User existingUser = new User();
+		User dbUser = this.userRepo.findByEmail(addUser.getEmail()).orElseThrow(()-> new ResourceNotFoundException("User", "email: "+addUser.getEmail(), 0));
+		if (dbUser != null) {
 				userDTO = new UserDTO();
-				BeanUtils.copyProperties(existingUser, userDTO);
+				BeanUtils.copyProperties(dbUser, userDTO);
 				userDTO.setMessage("User already exist");
 				userDTO.setStatusCode(400);
 
@@ -40,9 +40,10 @@ public class UserServiceImpl implements UserService {
 				userDTO.setMessage("Successfully saved");
 				userDTO.setStatusCode(200);
 			}
-		}
+		
 		return userDTO;
 	}
+	
 
 	@Override
 	public String deleteUser(Integer userId) {
