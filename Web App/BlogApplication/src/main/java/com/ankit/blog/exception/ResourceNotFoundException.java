@@ -1,5 +1,6 @@
 package com.ankit.blog.exception;
 
+@SuppressWarnings("serial")
 public class ResourceNotFoundException extends RuntimeException{
 	String resourceName;
 	String feildName;
