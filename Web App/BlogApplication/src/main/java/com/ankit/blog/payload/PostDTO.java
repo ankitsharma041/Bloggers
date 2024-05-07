@@ -19,13 +19,9 @@ public class PostDTO {
 	private String image;
 	private String content;
 	private Date date;
-<<<<<<< Updated upstream
+
 	private User user;
 	private Category category;
-=======
-	//private UserDTO user;
-	//private CategoryDTO category;
->>>>>>> Stashed changes
 	private Set<CommentDTO> comments = new HashSet<>();
 	private String message;
 	private int statusCode;
