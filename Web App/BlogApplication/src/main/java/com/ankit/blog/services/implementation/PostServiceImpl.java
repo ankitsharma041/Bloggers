@@ -40,35 +40,24 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public PostDTO createPost(Post post, Integer userId, Integer categoryId) {
-
-		User user = this.userRepo.findById(userId)
-				.orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
-		UserDTO userDTO = this.modelMapper.map(user, UserDTO.class);
-		userDTO.setId(user.getId());
-		userDTO.setMessage("User name:- "+user.getName());
-		userDTO.setStatusCode(200);
 		
-		Category category = this.categoryRepo.findById(categoryId)
-				.orElseThrow(() -> new ResourceNotFoundException("Category", "id", categoryId));
-		CategoryDTO categoryDTO = this.modelMapper.map(category, CategoryDTO.class);
-		categoryDTO.setId(category.getId());
-		categoryDTO.setMessage("Cateogory title:- "+category.getTitle());
-		categoryDTO.setStatusCode(200);
+		User user = this.userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User", "id", userId));
+		
+		Category category = this.categoryRepo.findById(categoryId).orElseThrow(()-> new ResourceNotFoundException("Category", "id", categoryId));
+		
+		post.setTitle(post.getTitle());
+		post.setContent(post.getContent());
+		post.setImage("image.png");
+		post.setDate(new Date());
+		post.setUser(user);
+		post.setCategory(category);
 		Post newPost = this.postRepo.save(post);
 		PostDTO postDTO = this.modelMapper.map(newPost, PostDTO.class);
-		
-		postDTO.setId(newPost.getId());
-		postDTO.setTitle(newPost.getTitle());
-		postDTO.setDate(new Date());
-		postDTO.setUser(userDTO);
-		postDTO.setCategory(categoryDTO);
-		postDTO.setMessage("New Post added successfully!!..");
+		postDTO.setMessage("Post Added successfully");
 		postDTO.setStatusCode(200);
-		
-		
 		return postDTO;
-		
 	}
+	
 
 	@Override
 	public PostDTO updatePost(Post post, Integer postId) {

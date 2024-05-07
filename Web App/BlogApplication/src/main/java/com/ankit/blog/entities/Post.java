@@ -3,7 +3,6 @@ package com.ankit.blog.entities;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,7 +24,7 @@ import lombok.Setter;
 public class Post {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private int postId;
 	private String title;
 	private String image;
 	@Column(length = 10000)
@@ -39,4 +38,6 @@ public class Post {
 	
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Comments> comments = new HashSet<>();
+	
+	
 }
