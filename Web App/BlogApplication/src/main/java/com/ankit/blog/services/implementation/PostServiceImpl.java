@@ -3,6 +3,7 @@ package com.ankit.blog.services.implementation;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 import com.ankit.blog.dao.CategoryRepo;
 import com.ankit.blog.dao.PostRepo;
 import com.ankit.blog.dao.UserRepo;
@@ -17,10 +19,8 @@ import com.ankit.blog.entities.Category;
 import com.ankit.blog.entities.Post;
 import com.ankit.blog.entities.User;
 import com.ankit.blog.exception.ResourceNotFoundException;
-import com.ankit.blog.payload.CategoryDTO;
 import com.ankit.blog.payload.PostDTO;
 import com.ankit.blog.payload.PostResponse;
-import com.ankit.blog.payload.UserDTO;
 import com.ankit.blog.services.PostService;
 
 @Service
@@ -40,6 +40,7 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public PostDTO createPost(Post post, Integer userId, Integer categoryId) {
+<<<<<<< Updated upstream
 		
 		User user = this.userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User", "id", userId));
 		
@@ -54,6 +55,33 @@ public class PostServiceImpl implements PostService {
 		Post newPost = this.postRepo.save(post);
 		PostDTO postDTO = this.modelMapper.map(newPost, PostDTO.class);
 		postDTO.setMessage("Post Added successfully");
+=======
+
+		this.userRepo.findById(userId)
+				.orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+//		UserDTO userDTO = this.modelMapper.map(user, UserDTO.class);
+//		userDTO.setId(user.getId());
+//		userDTO.setMessage("User name:- "+user.getName());
+//		userDTO.setStatusCode(200);
+		
+		this.categoryRepo.findById(categoryId)
+				.orElseThrow(() -> new ResourceNotFoundException("Category", "id", categoryId));
+//		CategoryDTO categoryDTO = this.modelMapper.map(category, CategoryDTO.class);
+//		categoryDTO.setId(category.getId());
+//		categoryDTO.setMessage("Cateogory title:- "+category.getTitle());
+//		categoryDTO.setStatusCode(200);
+		Post newPost = this.postRepo.save(post);
+		PostDTO postDTO = this.modelMapper.map(newPost, PostDTO.class);
+		
+		postDTO.setId(newPost.getId());
+		postDTO.setTitle(newPost.getTitle());
+		postDTO.setDate(new Date());
+		postDTO.setContent(newPost.getContent());
+		postDTO.setImage("ankit.png");
+		//postDTO.setUser(userDTO);
+		//postDTO.setCategory(categoryDTO);
+		postDTO.setMessage("New Post added successfully!!..");
+>>>>>>> Stashed changes
 		postDTO.setStatusCode(200);
 		return postDTO;
 	}
@@ -75,7 +103,13 @@ public class PostServiceImpl implements PostService {
 		
 		Post updatePost = this.postRepo.save(uPost);
 		PostDTO postDTO = this.modelMapper.map(updatePost, PostDTO.class);
+		//UserDTO userDTO = this.modelMapper.map(postDTO, UserDTO.class);
+		//CategoryDTO categoryDTO = this.modelMapper.map(postDTO, CategoryDTO.class);
 		postDTO.setMessage("Post has been Updated..");
+		postDTO.setStatusCode(200);
+		postDTO.setDate(new Date());
+		//postDTO.setUser(userDTO);
+		//postDTO.setCategory(categoryDTO);
 		return postDTO;
 	}
 

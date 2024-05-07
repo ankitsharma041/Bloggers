@@ -44,7 +44,8 @@ public class UserServiceImpl implements UserService {
 				.orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 		 this.userRepo.delete(user);
 		 UserDTO userDTO = new UserDTO();
-		 userDTO.setMessage("User with username " +user.getEmail()+ " has been deleted");
+		 userDTO.setId(user.getId());
+		 userDTO.setMessage("User " +user.getEmail()+ " has been deleted");
 		 userDTO.setStatusCode(200);
 		 return userDTO;
 	}

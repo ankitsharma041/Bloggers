@@ -59,6 +59,7 @@ public class CategoryServiceImpl implements CategoryService {
 		Category category = this.categoryRepo.findById(categoryId).orElseThrow(()-> new ResourceNotFoundException("Category", "id", categoryId));
 		this.categoryRepo.delete(category);
 		CategoryDTO categoryDTO = new CategoryDTO();
+		categoryDTO.setId(category.getId());
 		categoryDTO.setMessage("Category with id "+category.getId()+"has been deleted..");
 		categoryDTO.setStatusCode(200);
 		return categoryDTO;
