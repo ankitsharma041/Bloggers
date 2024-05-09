@@ -27,8 +27,12 @@ public class CategoryServiceImpl implements CategoryService {
 			categoryDTO.setMessage(category.getTitle()+" already exists!..");
 		}else {
 			Category newCategory = this.categoryRepo.save(category);
+			category.setId(category.getId());
+			category.setTitle(category.getTitle());
+			category.setDescription(category.getDescription());
 			categoryDTO = this.modelMapper.map(newCategory, CategoryDTO.class);
-			categoryDTO.setMessage("CategoryId :- "+newCategory.getId());
+			
+			categoryDTO.setMessage("Category added successfully");
 			categoryDTO.setStatusCode(200);
 		}
 		return categoryDTO;
@@ -59,8 +63,10 @@ public class CategoryServiceImpl implements CategoryService {
 		Category category = this.categoryRepo.findById(categoryId).orElseThrow(()-> new ResourceNotFoundException("Category", "id", categoryId));
 		this.categoryRepo.delete(category);
 		CategoryDTO categoryDTO = new CategoryDTO();
+		categoryDTO.setTitle(category.getTitle());
+		categoryDTO.setDescription(category.getDescription());
 		categoryDTO.setId(category.getId());
-		categoryDTO.setMessage("Category with id "+category.getId()+"has been deleted..");
+		categoryDTO.setMessage("Category has been deleted..");
 		categoryDTO.setStatusCode(200);
 		return categoryDTO;
 	}

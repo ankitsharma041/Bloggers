@@ -24,13 +24,19 @@ public class UserServiceImpl implements UserService {
 		Optional<User> dbUser = this.userRepo.findByEmail(addUser.getEmail());
 		UserDTO userDTO = new UserDTO();
 		if (dbUser.isPresent()) {
+			
 			userDTO.setMessage(addUser.getEmail() + (" already exists"));
 			userDTO.setStatusCode(400);
 		} else {
 
 			User newUser = this.userRepo.save(addUser);
 			userDTO = this.modelMapper.map(newUser, UserDTO.class);
-			userDTO.setMessage("Your UserId is "+newUser.getId());
+			userDTO.getId();
+			userDTO.setName(addUser.getName());
+			userDTO.setEmail(addUser.getEmail());
+			userDTO.setPassword(addUser.getPassword());
+			userDTO.setAbout(addUser.getAbout());
+			userDTO.setMessage("User added successfully");
 			userDTO.setStatusCode(200);
 		}
 
@@ -45,6 +51,11 @@ public class UserServiceImpl implements UserService {
 		 this.userRepo.delete(user);
 		 UserDTO userDTO = new UserDTO();
 		 userDTO.setId(user.getId());
+		 userDTO.setName(user.getName());
+		 userDTO.setEmail(user.getEmail());
+		 userDTO.setPassword(user.getPassword());
+		 userDTO.setAbout(user.getAbout());
+		 
 		 userDTO.setMessage("User " +user.getEmail()+ " has been deleted");
 		 userDTO.setStatusCode(200);
 		 return userDTO;

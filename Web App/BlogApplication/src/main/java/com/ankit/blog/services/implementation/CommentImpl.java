@@ -1,5 +1,7 @@
  package com.ankit.blog.services.implementation;
 
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,7 @@ public class CommentImpl implements CommentService {
 		comments.setPost(post);
 		Comments newComment = this.commentRepo.save(comments);
 		CommentDTO commentDTOs = this.modelMapper.map(newComment, CommentDTO.class);
+		commentDTOs.setMessage("Comment added successfully");
 		return commentDTOs;
 	}
 
@@ -50,4 +53,11 @@ public class CommentImpl implements CommentService {
 		return commentDTOs;
 	}
 
+	@Override
+	public List<Comments> getComments() {
+		List<Comments> comments = this.commentRepo.findAll();
+		return comments;
+	}
+
+	
 }

@@ -10,8 +10,8 @@ import lombok.Setter;
 public class CategoryDTO {
 
 	private int id;
-//	private String title;
-//	private String description;
+	private String title;
+	private String description;
 	private String message;
 	private int statusCode;
 }
