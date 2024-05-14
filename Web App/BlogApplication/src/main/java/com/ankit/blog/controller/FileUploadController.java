@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.ankit.blog.helper.FileUploadHelper;
 
@@ -32,7 +33,9 @@ public class FileUploadController {
 //			
 			boolean  files = fileUploadHelper.uploadFile(file);
 			if(files) {
-				return ResponseEntity.ok("File uploaded successfully");
+				//return ResponseEntity.ok("File uploaded successfully");
+				
+				return ResponseEntity.ok(ServletUriComponentsBuilder.fromCurrentContextPath().path("/image/").path(file.getOriginalFilename()).toUriString());
 			}
 		} catch (Exception e) {
 			// TODO: handle exception

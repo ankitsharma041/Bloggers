@@ -2,18 +2,28 @@ package com.ankit.blog.helper;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+import org.apache.jasper.tagplugins.jstl.core.Catch;
+import org.modelmapper.internal.asm.tree.TryCatchBlockNode;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class FileUploadHelper {
 
-	public final String UPLOAD_DIR = "D:\\Ankit\\Bloggers\\Web App\\BlogApplication\\src\\main\\resources\\static\\image";
+	//public final String UPLOAD_DIR = "C:\\Users\\Ankit Sharma\\git\\Bloggers\\Web App\\BlogApplication\\src\\main\\resources\\static\\image";
+	
+	public final String UPLOAD_DIR = new ClassPathResource("static/image/").getFile().getAbsolutePath();
+	
+	public FileUploadHelper() throws IOException{
+		
+	}
 
 	public boolean uploadFile(MultipartFile multipartFile) {
 		boolean file = false;
