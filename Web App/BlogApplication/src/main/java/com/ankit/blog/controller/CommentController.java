@@ -21,21 +21,21 @@ import com.ankit.blog.services.CommentService;
 
 
 @RestController
-@RequestMapping("api")
+@RequestMapping("/api")
 public class CommentController {
 	@Autowired
 	private CommentService commentService;
-	@PostMapping("post/{postId}/addComments")
+	@PostMapping("/post/{postId}/addComments")
 	public ResponseEntity<CommentDTO> postComments(@RequestBody CommentDTO commentDTO,@PathVariable Integer postId){
 		CommentDTO newComments = this.commentService.postComment(commentDTO, postId);
 		return new ResponseEntity<CommentDTO>(newComments, HttpStatus.CREATED);
 	}
-	@DeleteMapping("deleteComment/{commentId}")
+	@DeleteMapping("/deleteComment/{commentId}")
 	public ApiResponse deleteComment(@PathVariable Integer commentId){
 		this.commentService.deleteComment(commentId);
 		return new ApiResponse("Comment has been deleted successfully", true);
 	}
-	@PutMapping("updateComment/{commentId}")
+	@PutMapping("/updateComment/{commentId}")
 	public ResponseEntity<CommentDTO> updateComment(@RequestBody CommentDTO commentDTO, @PathVariable Integer commentId){
 		CommentDTO updatedComment = this.commentService.updateComment(commentDTO, commentId);
 		return new ResponseEntity<CommentDTO>(updatedComment, HttpStatus.CREATED);

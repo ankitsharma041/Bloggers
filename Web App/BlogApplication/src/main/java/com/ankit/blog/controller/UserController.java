@@ -1,6 +1,7 @@
 package com.ankit.blog.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,44 +16,65 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.ankit.blog.entities.User;
 import com.ankit.blog.payload.UserDTO;
+import com.ankit.blog.services.SecurityTokenGenerator;
 import com.ankit.blog.services.UserService;
 
 @RestController
-@RequestMapping("api")
+@RequestMapping("/api")
 public class UserController {
 
 	@Autowired
 	public UserService userService;
 
-	@PostMapping("addUser")
+	@Autowired
+	private SecurityTokenGenerator securityTokenGenerator;
+
+	@PostMapping("/addUser")
 	public ResponseEntity<UserDTO> createUser(@RequestBody User addUser) {
 		UserDTO newUser = this.userService.createUser(addUser);
 		return ResponseEntity.ok(newUser);
 	}
 
-	@GetMapping("getUsers")
+	@GetMapping("/getUsers")
 	public ResponseEntity<List<User>> getAllUsers() {
 		List<User> allUsers = this.userService.getAllUser();
 		return ResponseEntity.ok(allUsers);
 	}
 
-	@GetMapping("getUser/{userId}")
+	@GetMapping("/getUser/{userId}")
 	public ResponseEntity<UserDTO> getUser(@PathVariable Integer userId) {
 		UserDTO getUser = this.userService.getUser(userId);
 		return ResponseEntity.ok(getUser);
 	}
 
-	@PutMapping("updateUser/{userId}")
+	@PutMapping("/updateUser/{userId}")
 	public ResponseEntity<UserDTO> udpateUser(@PathVariable Integer userId, @RequestBody User updateUser) {
 		UserDTO updatedUser = this.userService.updateUser(userId, updateUser);
 		return ResponseEntity.ok(updatedUser);
 	}
 
-	@DeleteMapping("deleteUser/{userId}")
+	@DeleteMapping("/deleteUser/{userId}")
 	public ResponseEntity<UserDTO> deleteUser(@PathVariable Integer userId) {
 
 		UserDTO deletedUser = this.userService.deleteUser(userId);
 		return new ResponseEntity<UserDTO>(deletedUser, HttpStatus.OK);
+	}
+
+	@PostMapping("/login")
+	public ResponseEntity<?> loginCheck(@RequestBody User user) throws Exception {
+		Map<String, String> map = null;
+		try {
+			User result = userService.loginCheck(user.getEmail(), user.getPassword());
+
+			map = securityTokenGenerator.generateToken(result);
+			return new ResponseEntity<>(map, HttpStatus.OK);
+		}
+//	        catch(Exception ex){
+//	            throw new Exception();
+//	        }
+		catch (Exception ex) {
+			return new ResponseEntity<>("Other exception", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 }

@@ -20,5 +20,5 @@ public interface UserService {
 
 	public UserDTO getUser(Integer userId);
 	
-	
+	public  User loginCheck(String email , String userPassword) throws Exception;
 }

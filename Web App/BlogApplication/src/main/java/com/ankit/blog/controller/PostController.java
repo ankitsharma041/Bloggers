@@ -23,38 +23,38 @@ import com.ankit.blog.payload.PostResponse;
 import com.ankit.blog.services.PostService;
 
 @RestController
-@RequestMapping("api")
+@RequestMapping("/api")
 public class PostController {
 
 	@Autowired
 	private PostService postService;
 
-	@PostMapping("addPost/user/{userId}/category/{categoryId}")
+	@PostMapping("/addPost/user/{userId}/category/{categoryId}")
 	public ResponseEntity<PostDTO> createPost(@RequestBody Post post, @PathVariable Integer userId,
 			@PathVariable Integer categoryId) {
 		PostDTO newPost = this.postService.createPost(post, userId, categoryId);
 		return new ResponseEntity<PostDTO>(newPost, HttpStatus.CREATED);
 	}
 
-	@GetMapping("getPost/category/{categoryId}")
+	@GetMapping("/getPost/category/{categoryId}")
 	public ResponseEntity<List<PostDTO>> getByCategory(@PathVariable Integer categoryId) {
 		List<PostDTO> cPosts = this.postService.getPostByCategory(categoryId);
 		return new ResponseEntity<List<PostDTO>>(cPosts, HttpStatus.FOUND);
 	}
 
-	@GetMapping("getPost/user/{userId}")
+	@GetMapping("/getPost/user/{userId}")
 	public ResponseEntity<List<PostDTO>> getByUser(@PathVariable Integer userId) {
 		List<PostDTO> uPosts = this.postService.getPostByUser(userId);
 		return new ResponseEntity<List<PostDTO>>(uPosts, HttpStatus.FOUND);
 	}
 
-	@GetMapping("getPost/id/{postId}")
+	@GetMapping("/getPost/id/{postId}")
 	public ResponseEntity<PostDTO> getPost(@PathVariable Integer postId) {
 		PostDTO post = this.postService.getPostById(postId);
 		return new ResponseEntity<PostDTO>(post, HttpStatus.FOUND);
 	}
 
-	@GetMapping("getPosts")
+	@GetMapping("/getPosts")
 	public ResponseEntity<PostResponse> getAllPosts(
 			@RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false)Integer pageNumber,
 			@RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
@@ -64,14 +64,14 @@ public class PostController {
 		return new ResponseEntity<PostResponse>(allPosts, HttpStatus.FOUND);
 	}
 
-	@DeleteMapping("deletePost/{postId}")
+	@DeleteMapping("/deletePost/{postId}")
 	public ApiResponse deletePost(@PathVariable Integer postId) {
 		this.postService.deletePost(postId);
 		return new ApiResponse("Post has been deleted Successfully", true);
 
 	}
 
-	@PutMapping("updatePost/{postId}")
+	@PutMapping("/updatePost/{postId}")
 	public ResponseEntity<PostDTO> updatePost(@RequestBody Post post, @PathVariable Integer postId) {
 		PostDTO updatePost = this.postService.updatePost(post, postId);
 		return new ResponseEntity<PostDTO>(updatePost, HttpStatus.OK);

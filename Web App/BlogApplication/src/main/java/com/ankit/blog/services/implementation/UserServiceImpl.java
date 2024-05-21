@@ -104,4 +104,16 @@ public class UserServiceImpl implements UserService {
 		userDTO.setStatusCode(200);
 		return userDTO;
 	}
+
+	@Override
+	public User loginCheck(String email, String userPassword) throws Exception {
+		
+		 User user = userRepo.findByEmailAndPassword(email,userPassword);
+	        if(user!=null){ //authentication is ok
+	            return user;
+	        }
+	        else{ // authentication failed
+	            throw new Exception();
+	        }
+	}
 }

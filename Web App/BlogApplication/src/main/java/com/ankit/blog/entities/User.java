@@ -32,6 +32,8 @@ public class User {
 	private String password;
 
 	private String about;
+	
+	private String role;
 	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Post> post = new ArrayList<>();

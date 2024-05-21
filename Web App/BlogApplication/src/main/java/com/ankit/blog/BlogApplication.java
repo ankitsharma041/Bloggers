@@ -15,7 +15,7 @@ public class BlogApplication {
 		SpringApplication.run(BlogApplication.class, args);
 
 	}
-	
+
 //	@EventListener(ApplicationReadyEvent.class)
 //	public void emailTrigger() {
 //		emailServiceImpl.sendMail("sharmankit041@gmail.com", "this is body", "Testing API", "D:\\download.jpg");
