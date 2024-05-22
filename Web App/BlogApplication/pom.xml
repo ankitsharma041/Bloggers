@@ -26,14 +26,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
-<<<<<<< Updated upstream
-		<!--<dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 
-		</dependency>-->
-=======
+		</dependency>
+
 		<!--
 		https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter -->
 		<dependency>
@@ -42,7 +40,7 @@
 			<version>3.0.0</version>
 		</dependency>
 
->>>>>>> Stashed changes
+
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
