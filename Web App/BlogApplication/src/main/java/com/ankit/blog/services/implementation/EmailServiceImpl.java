@@ -35,7 +35,7 @@ public class EmailServiceImpl {
         mimeMessageHelper.addAttachment(attachmentName, byteArrayResource);
 
         javaMailSender.send(mimeMessage);
-        System.out.println("Email has been sent successfully");
+       // System.out.println("Email has been sent successfully");
     }
 
     public byte[] createZipFile(MultipartFile[] files) throws IOException {
