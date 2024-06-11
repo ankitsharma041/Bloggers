@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import com.ankit.blog.entities.User;
 import com.ankit.blog.payload.UserDTO;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 @Service
 public interface UserService {
 
@@ -19,6 +21,8 @@ public interface UserService {
 	public List<User> getAllUser();
 
 	public UserDTO getUser(Integer userId);
+
+	public void generateExcel(HttpServletResponse response);
 	
-	public  User loginCheck(String email , String userPassword) throws Exception;
+	
 }

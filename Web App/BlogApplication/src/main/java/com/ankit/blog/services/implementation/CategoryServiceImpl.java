@@ -5,10 +5,11 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ankit.blog.dao.CategoryRepo;
+
 import com.ankit.blog.entities.Category;
 import com.ankit.blog.exception.ResourceNotFoundException;
 import com.ankit.blog.payload.CategoryDTO;
+import com.ankit.blog.repository.CategoryRepo;
 import com.ankit.blog.services.CategoryService;
 
 @Service

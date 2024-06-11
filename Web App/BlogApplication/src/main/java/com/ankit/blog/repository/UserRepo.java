@@ -1,4 +1,4 @@
-package com.ankit.blog.dao;
+package com.ankit.blog.repository;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;

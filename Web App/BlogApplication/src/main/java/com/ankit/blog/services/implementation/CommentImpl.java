@@ -6,12 +6,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ankit.blog.dao.CommentRepo;
-import com.ankit.blog.dao.PostRepo;
 import com.ankit.blog.entities.Comments;
 import com.ankit.blog.entities.Post;
 import com.ankit.blog.exception.ResourceNotFoundException;
 import com.ankit.blog.payload.CommentDTO;
+import com.ankit.blog.repository.CommentRepo;
+import com.ankit.blog.repository.PostRepo;
 import com.ankit.blog.services.CommentService;
 @Service
 public class CommentImpl implements CommentService {

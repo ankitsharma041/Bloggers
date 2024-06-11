@@ -12,15 +12,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.ankit.blog.dao.CategoryRepo;
-import com.ankit.blog.dao.PostRepo;
-import com.ankit.blog.dao.UserRepo;
 import com.ankit.blog.entities.Category;
 import com.ankit.blog.entities.Post;
 import com.ankit.blog.entities.User;
 import com.ankit.blog.exception.ResourceNotFoundException;
 import com.ankit.blog.payload.PostDTO;
 import com.ankit.blog.payload.PostResponse;
+import com.ankit.blog.repository.CategoryRepo;
+import com.ankit.blog.repository.PostRepo;
+import com.ankit.blog.repository.UserRepo;
 import com.ankit.blog.services.PostService;
 
 @Service

@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import com.ankit.blog.dao.UserRepo;
 import com.ankit.blog.entities.User;
 import com.ankit.blog.exception.ResourceNotFoundException;
+import com.ankit.blog.repository.UserRepo;
 
 public class UserDetails implements UserDetailsService {
 	

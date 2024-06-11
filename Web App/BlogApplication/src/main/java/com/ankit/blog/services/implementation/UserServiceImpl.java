@@ -2,14 +2,28 @@ package com.ankit.blog.services.implementation;
 
 import java.util.List;
 import java.util.Optional;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ankit.blog.dao.UserRepo;
+
 import com.ankit.blog.entities.User;
 import com.ankit.blog.exception.ResourceNotFoundException;
 import com.ankit.blog.payload.UserDTO;
+import com.ankit.blog.repository.UserRepo;
 import com.ankit.blog.services.UserService;
+
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -24,7 +38,7 @@ public class UserServiceImpl implements UserService {
 		Optional<User> dbUser = this.userRepo.findByEmail(addUser.getEmail());
 		UserDTO userDTO = new UserDTO();
 		if (dbUser.isPresent()) {
-			
+
 			userDTO.setMessage(addUser.getEmail() + (" already exists"));
 			userDTO.setStatusCode(400);
 		} else {
@@ -48,25 +62,25 @@ public class UserServiceImpl implements UserService {
 
 		User user = this.userRepo.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
-		 this.userRepo.delete(user);
-		 UserDTO userDTO = new UserDTO();
-		 userDTO.setId(user.getId());
-		 userDTO.setName(user.getName());
-		 userDTO.setEmail(user.getEmail());
-		 userDTO.setPassword(user.getPassword());
-		 userDTO.setAbout(user.getAbout());
-		 
-		 userDTO.setMessage("User " +user.getEmail()+ " has been deleted");
-		 userDTO.setStatusCode(200);
-		 return userDTO;
+		this.userRepo.delete(user);
+		UserDTO userDTO = new UserDTO();
+		userDTO.setId(user.getId());
+		userDTO.setName(user.getName());
+		userDTO.setEmail(user.getEmail());
+		userDTO.setPassword(user.getPassword());
+		userDTO.setAbout(user.getAbout());
+
+		userDTO.setMessage("User " + user.getEmail() + " has been deleted");
+		userDTO.setStatusCode(200);
+		return userDTO;
 	}
 
 	@Override
 	public UserDTO updateUser(Integer userId, User updateUser) {
-		
+
 		User user = this.userRepo.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
-		
+
 		if (updateUser.getName() != null) {
 			user.setName(updateUser.getName());
 		}
@@ -98,22 +112,117 @@ public class UserServiceImpl implements UserService {
 	public UserDTO getUser(Integer userId) {
 		User user = this.userRepo.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
-		
+
 		UserDTO userDTO = this.modelMapper.map(user, UserDTO.class);
-		userDTO.setMessage("User with userId "+user.getId()+" is "+user.getName());
+		userDTO.setMessage("User with userId " + user.getId() + " is " + user.getName());
 		userDTO.setStatusCode(200);
 		return userDTO;
 	}
 
+
 	@Override
-	public User loginCheck(String email, String userPassword) throws Exception {
-		
-		 User user = userRepo.findByEmailAndPassword(email,userPassword);
-	        if(user!=null){ //authentication is ok
-	            return user;
-	        }
-	        else{ // authentication failed
-	            throw new Exception();
-	        }
+	public void generateExcel(HttpServletResponse response) {
+	    List<User> users = userRepo.findAll();
+
+	    HSSFWorkbook workbook = new HSSFWorkbook();
+	    HSSFSheet sheet = workbook.createSheet("User Info");
+
+	    // Create a font for the header and data cells
+	    HSSFFont calibriFont = workbook.createFont();
+	    calibriFont.setFontName("Calibri");
+
+	    // Create header style with bold Calibri font
+	    HSSFCellStyle headerStyle = workbook.createCellStyle();
+	    headerStyle.setFillForegroundColor(HSSFColor.HSSFColorPredefined.LIGHT_YELLOW.getIndex());
+	    headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+	    headerStyle.setBorderTop(BorderStyle.THIN);
+	    headerStyle.setBorderBottom(BorderStyle.THIN);
+	    headerStyle.setBorderLeft(BorderStyle.THIN);
+	    headerStyle.setBorderRight(BorderStyle.THIN);
+	    
+	    HSSFFont headerFont = workbook.createFont();
+	    headerFont.setBold(true);
+	    headerFont.setFontName("Calibri");
+	    headerStyle.setFont(headerFont);
+
+	    // Create data style for even rows with Calibri font
+	    HSSFCellStyle evenRowStyle = workbook.createCellStyle();
+	    evenRowStyle.setFillForegroundColor(HSSFColor.HSSFColorPredefined.LIGHT_GREEN.getIndex());
+	    evenRowStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+	    evenRowStyle.setBorderTop(BorderStyle.THIN);
+	    evenRowStyle.setBorderBottom(BorderStyle.THIN);
+	    evenRowStyle.setBorderLeft(BorderStyle.THIN);
+	    evenRowStyle.setBorderRight(BorderStyle.THIN);
+	    evenRowStyle.setFont(calibriFont);
+
+	    // Create data style for odd rows with Calibri font
+	    HSSFCellStyle oddRowStyle = workbook.createCellStyle();
+	    oddRowStyle.setFillForegroundColor(HSSFColor.HSSFColorPredefined.LIGHT_TURQUOISE.getIndex());
+	    oddRowStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+	    oddRowStyle.setBorderTop(BorderStyle.THIN);
+	    oddRowStyle.setBorderBottom(BorderStyle.THIN);
+	    oddRowStyle.setBorderLeft(BorderStyle.THIN);
+	    oddRowStyle.setBorderRight(BorderStyle.THIN);
+	    oddRowStyle.setFont(calibriFont);
+
+	    // Create header row
+	    HSSFRow headerRow = sheet.createRow(0);
+	    HSSFCell cell;
+
+	    String[] headers = {"S.No", "USER_ID", "USER_NAME", "EMAIL_ID", "PASSWORD", "ABOUT_USER", "ROLE"};
+	    for (int i = 0; i < headers.length; i++) {
+	        cell = headerRow.createCell(i);
+	        cell.setCellValue(headers[i]);
+	        cell.setCellStyle(headerStyle);
+	    }
+
+	    // Create data rows
+	    int dataRowIndex = 1;
+	    int serialNumber = 1;
+	    for (User user : users) {
+	        HSSFRow dataRow = sheet.createRow(dataRowIndex);
+	        HSSFCellStyle rowStyle = (dataRowIndex % 2 == 0) ? evenRowStyle : oddRowStyle;
+
+	        cell = dataRow.createCell(0);
+	        cell.setCellValue(serialNumber);
+	        cell.setCellStyle(rowStyle);
+
+	        cell = dataRow.createCell(1);
+	        cell.setCellValue(user.getId());
+	        cell.setCellStyle(rowStyle);
+
+	        cell = dataRow.createCell(2);
+	        cell.setCellValue(user.getName());
+	        cell.setCellStyle(rowStyle);
+
+	        cell = dataRow.createCell(3);
+	        cell.setCellValue(user.getEmail());
+	        cell.setCellStyle(rowStyle);
+
+	        cell = dataRow.createCell(4);
+	        cell.setCellValue(user.getPassword());
+	        cell.setCellStyle(rowStyle);
+
+	        cell = dataRow.createCell(5);
+	        cell.setCellValue(user.getAbout());
+	        cell.setCellStyle(rowStyle);
+
+	        cell = dataRow.createCell(6);
+	        cell.setCellValue(user.getRole());
+	        cell.setCellStyle(rowStyle);
+
+	        dataRowIndex++;
+	        serialNumber++;
+	    }
+
+	    try {
+	        ServletOutputStream ops = response.getOutputStream();
+	        workbook.write(ops);
+	        workbook.close();
+	        ops.close();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
+
 }

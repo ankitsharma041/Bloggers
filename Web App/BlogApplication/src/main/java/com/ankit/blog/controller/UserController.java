@@ -19,6 +19,8 @@ import com.ankit.blog.payload.UserDTO;
 import com.ankit.blog.services.SecurityTokenGenerator;
 import com.ankit.blog.services.UserService;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -60,21 +62,19 @@ public class UserController {
 		return new ResponseEntity<UserDTO>(deletedUser, HttpStatus.OK);
 	}
 
-	@PostMapping("/login")
-	public ResponseEntity<?> loginCheck(@RequestBody User user) throws Exception {
-		Map<String, String> map = null;
-		try {
-			User result = userService.loginCheck(user.getEmail(), user.getPassword());
+	@GetMapping("/excel")
+	public void generateExcelReport(HttpServletResponse response) throws Exception {
 
-			map = securityTokenGenerator.generateToken(result);
-			return new ResponseEntity<>(map, HttpStatus.OK);
-		}
-//	        catch(Exception ex){
-//	            throw new Exception();
-//	        }
-		catch (Exception ex) {
-			return new ResponseEntity<>("Other exception", HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		response.setContentType("application/octet-stream");
+
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment;filename=UserDetails.xls";
+
+		response.setHeader(headerKey, headerValue);
+
+		userService.generateExcel(response);
+
+		response.flushBuffer();
 	}
 
 }
