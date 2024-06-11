@@ -20,6 +20,8 @@ import com.ankit.blog.entities.User;
 import com.ankit.blog.exception.ResourceNotFoundException;
 import com.ankit.blog.payload.UserDTO;
 import com.ankit.blog.repository.UserRepo;
+import com.ankit.blog.requestDTO.UserRequestDTO;
+import com.ankit.blog.responseDTO.UserResponseDTO;
 import com.ankit.blog.services.UserService;
 
 import jakarta.servlet.ServletOutputStream;
@@ -34,27 +36,29 @@ public class UserServiceImpl implements UserService {
 	private ModelMapper modelMapper;
 
 	@Override
-	public UserDTO createUser(User addUser) {
-		Optional<User> dbUser = this.userRepo.findByEmail(addUser.getEmail());
-		UserDTO userDTO = new UserDTO();
-		if (dbUser.isPresent()) {
+	public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
+	    Optional<User> dbUser = this.userRepo.findByEmail(userRequestDTO.getEmail());
+	    UserResponseDTO userResponseDTO = new UserResponseDTO();
+	    
+	    if (dbUser.isPresent()) {
+	        userResponseDTO.setMessage(userRequestDTO.getEmail() + " already exists");
+	        userResponseDTO.setStatusCode(400);
+	    } else {
+	        // Convert userRequestDTO to User entity if needed
+	        User newUser = this.modelMapper.map(userRequestDTO, User.class);
+	        
+	        // Save the new user
+	        newUser = this.userRepo.save(newUser);
+	        
+	        // Map the saved User entity back to UserResponseDTO
+	        userResponseDTO = this.modelMapper.map(newUser, UserResponseDTO.class);
+	        
+	        // Set success message and status code
+	        userResponseDTO.setMessage("User added successfully");
+	        userResponseDTO.setStatusCode(200);
+	    }
 
-			userDTO.setMessage(addUser.getEmail() + (" already exists"));
-			userDTO.setStatusCode(400);
-		} else {
-
-			User newUser = this.userRepo.save(addUser);
-			userDTO = this.modelMapper.map(newUser, UserDTO.class);
-			userDTO.getId();
-			userDTO.setName(addUser.getName());
-			userDTO.setEmail(addUser.getEmail());
-			userDTO.setPassword(addUser.getPassword());
-			userDTO.setAbout(addUser.getAbout());
-			userDTO.setMessage("User added successfully");
-			userDTO.setStatusCode(200);
-		}
-
-		return userDTO;
+	    return userResponseDTO;
 	}
 
 	@Override

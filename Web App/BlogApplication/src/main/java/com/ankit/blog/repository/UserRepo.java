@@ -9,5 +9,4 @@ import com.ankit.blog.entities.User;
 public interface UserRepo extends JpaRepository<User, Integer> {
 	Optional<User> findByEmail(String email);
 	
-	//User findByEmailAndPassword(String email, String password);
-}
+	}

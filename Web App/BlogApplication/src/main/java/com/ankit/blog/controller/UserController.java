@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.ankit.blog.entities.User;
 import com.ankit.blog.payload.UserDTO;
+import com.ankit.blog.requestDTO.UserRequestDTO;
+import com.ankit.blog.responseDTO.UserResponseDTO;
 import com.ankit.blog.services.SecurityTokenGenerator;
 import com.ankit.blog.services.UserService;
 
@@ -32,9 +34,9 @@ public class UserController {
 	private SecurityTokenGenerator securityTokenGenerator;
 
 	@PostMapping("/addUser")
-	public ResponseEntity<UserDTO> createUser(@RequestBody User addUser) {
-		UserDTO newUser = this.userService.createUser(addUser);
-		return ResponseEntity.ok(newUser);
+	public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserRequestDTO userRequestDTO) {
+		UserResponseDTO newUser = this.userService.createUser(userRequestDTO);
+		return new ResponseEntity<UserResponseDTO>(newUser, HttpStatus.OK);
 	}
 
 	@GetMapping("/getUsers")
