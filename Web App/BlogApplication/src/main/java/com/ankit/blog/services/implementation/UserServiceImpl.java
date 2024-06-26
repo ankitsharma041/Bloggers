@@ -131,11 +131,10 @@ public class UserServiceImpl implements UserService {
 	    HSSFWorkbook workbook = new HSSFWorkbook();
 	    HSSFSheet sheet = workbook.createSheet("User Info");
 
-	    // Create a font for the header and data cells
 	    HSSFFont calibriFont = workbook.createFont();
 	    calibriFont.setFontName("Calibri");
 
-	    // Create header style with bold Calibri font
+	 
 	    HSSFCellStyle headerStyle = workbook.createCellStyle();
 	    headerStyle.setFillForegroundColor(HSSFColor.HSSFColorPredefined.LIGHT_YELLOW.getIndex());
 	    headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
@@ -149,7 +148,7 @@ public class UserServiceImpl implements UserService {
 	    headerFont.setFontName("Calibri");
 	    headerStyle.setFont(headerFont);
 
-	    // Create data style for even rows with Calibri font
+	   
 	    HSSFCellStyle evenRowStyle = workbook.createCellStyle();
 	    evenRowStyle.setFillForegroundColor(HSSFColor.HSSFColorPredefined.LIGHT_GREEN.getIndex());
 	    evenRowStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
@@ -159,7 +158,7 @@ public class UserServiceImpl implements UserService {
 	    evenRowStyle.setBorderRight(BorderStyle.THIN);
 	    evenRowStyle.setFont(calibriFont);
 
-	    // Create data style for odd rows with Calibri font
+	  
 	    HSSFCellStyle oddRowStyle = workbook.createCellStyle();
 	    oddRowStyle.setFillForegroundColor(HSSFColor.HSSFColorPredefined.LIGHT_TURQUOISE.getIndex());
 	    oddRowStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
@@ -169,7 +168,7 @@ public class UserServiceImpl implements UserService {
 	    oddRowStyle.setBorderRight(BorderStyle.THIN);
 	    oddRowStyle.setFont(calibriFont);
 
-	    // Create header row
+	   
 	    HSSFRow headerRow = sheet.createRow(0);
 	    HSSFCell cell;
 
@@ -180,7 +179,7 @@ public class UserServiceImpl implements UserService {
 	        cell.setCellStyle(headerStyle);
 	    }
 
-	    // Create data rows
+	    
 	    int dataRowIndex = 1;
 	    int serialNumber = 1;
 	    for (User user : users) {
