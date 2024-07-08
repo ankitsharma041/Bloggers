@@ -37,14 +37,17 @@ public class UserServiceImpl implements UserService {
 		Optional<User> dbUser = this.userRepo.findByEmail(userRequestDTO.getEmail());
 		UserResponseDTO userResponseDTO = new UserResponseDTO();
 		if (dbUser.isPresent()) {
+			User newUser = this.modelMapper.map(userRequestDTO, User.class);
+			userResponseDTO = this.modelMapper.map(newUser, UserResponseDTO.class);
 			userResponseDTO.setMessage(userRequestDTO.getEmail() + " already exists");
 			userResponseDTO.setStatusCode(400);
+			
 		} else {
 			User newUser = this.modelMapper.map(userRequestDTO, User.class);
 			newUser = this.userRepo.save(newUser);
 			userResponseDTO = this.modelMapper.map(newUser, UserResponseDTO.class);
 			userResponseDTO.setMessage("User added successfully");
-			userResponseDTO.setStatusCode(200);
+			userResponseDTO.setStatusCode(200);	
 		}
 		return userResponseDTO;
 	}
