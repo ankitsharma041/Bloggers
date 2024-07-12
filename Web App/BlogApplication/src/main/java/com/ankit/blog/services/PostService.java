@@ -10,7 +10,7 @@ public interface PostService {
 	
 	public PostDTO createPost(Post post, Integer userId, Integer categoryId);
 	
-	public PostDTO updatePost(Post post, Integer postId);
+	public PostDTO updatePost(PostDTO postDTO, Integer postId);
 	
 	public PostDTO getPostById(Integer postId);
 	
