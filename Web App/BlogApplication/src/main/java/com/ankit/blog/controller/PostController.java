@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,7 +27,6 @@ import com.ankit.blog.payload.PostResponse;
 import com.ankit.blog.services.FileService;
 import com.ankit.blog.services.PostService;
 
-import io.swagger.v3.oas.models.media.MediaType;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController

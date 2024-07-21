@@ -30,9 +30,6 @@ public class UserController {
 	@Autowired
 	public UserService userService;
 
-	@Autowired
-	private SecurityTokenGenerator securityTokenGenerator;
-
 	@PostMapping("/addUser")
 	public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserRequestDTO userRequestDTO) {
 		UserResponseDTO newUser = this.userService.createUser(userRequestDTO);
